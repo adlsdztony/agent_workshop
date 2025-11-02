@@ -30,7 +30,7 @@ Agents involved:
 Run the demo:
 
 ```bash
-uv run python stages/stage3/demo.py
+python stages/stage3/demo.py
 ```
 
 Observe the console output to see which agent handled each step. Compare the final structured workflow against the intermediate messages logged during the run.
@@ -71,7 +71,7 @@ File: `stages/stage3/activity/starter_workflow.py`
 Run your workflow:
 
 ```bash
-uv run python stages/stage3/activity/starter_workflow.py
+python stages/stage3/activity/starter_workflow.py
 ```
 
 **Stretch ideas**

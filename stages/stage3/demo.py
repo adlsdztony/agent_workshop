@@ -1,6 +1,6 @@
 """
 Stage 3 demo: multi-agent workflow with handoffs and shared context.
-Run with: uv run python stages/stage3/demo.py
+Run with: python stages/stage3/demo.py
 """
 
 from __future__ import annotations
@@ -8,6 +8,7 @@ from __future__ import annotations
 import asyncio
 import shutil
 import subprocess
+import sys
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Literal, Sequence
@@ -164,12 +165,8 @@ def log_risk(
 
 
 CURRICULUM_SERVER_PARAMS = MCPServerStdioParams(
-    command="uv",
-    args=[
-        "run",
-        "python",
-        "stages/stage2/mcp_servers/curriculum_server.py",
-    ],
+    command=sys.executable,
+    args=[str(REPO_ROOT / "stages/stage2/mcp_servers/curriculum_server.py")],
     cwd=str(REPO_ROOT),
 )
 

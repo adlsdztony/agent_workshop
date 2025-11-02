@@ -7,7 +7,7 @@ Build your first OpenAI Agents SDK project end-to-end. By the end of this stage 
 - Understand the shape of an `Agent` and the role of the `Runner`.
 - Configure the SDK to talk to a self-hosted Ollama endpoint.
 - Use the built-in `LocalShellTool` safely by creating a restricted shell executor.
-- Run the agent with `uv run` inside the provided Docker environment.
+- Run the agent with `python` inside the provided Docker environment.
 
 ## 1. Environment Check
 
@@ -18,9 +18,8 @@ docker compose exec ollama ollama pull qwen:30b   # (first time only, downloads 
 docker compose exec workshop bash
 
 # Inside the container
-uv sync --frozen              # installs dependencies into /workspace/.venv
-uv run --python 3.11 --version
-uv run python --version
+pip install -r requirements.txt   # optional; keeps packages aligned with requirements.txt
+python --version
 ```
 
 The `ollama pull` command is only required the first time (or when you want to update/swap the model); it downloads `qwen:30b` into the shared volume mounted at `/root/.ollama`.
@@ -43,7 +42,7 @@ The compose file wires `OPENAI_BASE_URL=http://ollama:11434/v1`, so the Agents S
 Open `stages/stage1/demo.py` — it contains a fully working minimal agent. The important parts are annotated inline. Run it with:
 
 ```bash
-uv run python stages/stage1/demo.py
+python stages/stage1/demo.py
 ```
 
 Expected output (trimmed):
@@ -81,7 +80,7 @@ File: `stages/stage1/activity/starter_agent.py`
 Run your agent with:
 
 ```bash
-uv run python stages/stage1/activity/starter_agent.py
+python stages/stage1/activity/starter_agent.py
 ```
 
 **Stretch ideas**

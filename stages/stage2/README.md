@@ -19,7 +19,7 @@ docker compose exec ollama ollama pull qwen:30b   # ensure the model exists (fir
 docker compose exec workshop bash
 
 # Inside the container (first time only)
-uv sync --frozen
+pip install -r requirements.txt   # optional; ensures dependencies match requirements.txt
 ```
 
 ### Helpful environment flags
@@ -52,7 +52,7 @@ Open `stages/stage2/demo.py`. It defines:
 Run it:
 
 ```bash
-uv run python stages/stage2/demo.py
+python stages/stage2/demo.py
 ```
 
 You should see streaming traces similar to:
@@ -68,7 +68,7 @@ Review the code to notice:
 
 - The docstring of `find_repo_todos` doubles as the tool description.
 - Paths are validated before accessing the filesystem.
-- `MCPServerStdio` automatically spawns the server script with `uv run`.
+- `MCPServerStdio` automatically spawns the server script with the active Python interpreter.
 - `agent.mcp_servers=[curriculum_server]` exposes all MCP tools under the `curriculum.` namespace.
 
 ## 3. Building the MCP Server
@@ -101,7 +101,7 @@ File: `stages/stage2/activity/starter_agent.py`
 Run the activity:
 
 ```bash
-uv run python stages/stage2/activity/starter_agent.py
+python stages/stage2/activity/starter_agent.py
 ```
 
 **Stretch ideas**

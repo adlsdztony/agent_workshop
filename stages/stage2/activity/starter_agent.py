@@ -2,12 +2,13 @@
 Stage 2 activity starter.
 
 Goal: craft a curriculum coach that combines a custom function tool and MCP data.
-Run with: uv run python stages/stage2/activity/starter_agent.py
+Run with: python stages/stage2/activity/starter_agent.py
 """
 
 from __future__ import annotations
 
 import asyncio
+import sys
 from pathlib import Path
 from typing import Literal
 
@@ -16,7 +17,6 @@ from agents.mcp import MCPServerStdio, MCPServerStdioParams
 from pydantic import BaseModel, Field
 
 
-WORKSPACE_ROOT = Path("/workspace").resolve()
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
 
@@ -66,12 +66,8 @@ def draft_outline(
 
 
 CURRICULUM_SERVER_PARAMS = MCPServerStdioParams(
-    command="uv",
-    args=[
-        "run",
-        "python",
-        "stages/stage2/mcp_servers/curriculum_server.py",
-    ],
+    command=sys.executable,
+    args=[str(REPO_ROOT / "stages/stage2/mcp_servers/curriculum_server.py")],
     cwd=str(REPO_ROOT),
 )
 

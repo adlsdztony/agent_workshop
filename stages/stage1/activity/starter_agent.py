@@ -2,7 +2,7 @@
 Stage 1 activity starter.
 
 Goal: build a "project scout" agent that reports on repository structure.
-Run with: uv run python stages/stage1/activity/starter_agent.py
+Run with: python stages/stage1/activity/starter_agent.py
 """
 
 from __future__ import annotations

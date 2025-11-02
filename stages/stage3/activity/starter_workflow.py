@@ -2,11 +2,12 @@
 Stage 3 activity starter.
 
 Objective: orchestrate a deployment workflow with multiple specialised agents.
-Run with: uv run python stages/stage3/activity/starter_workflow.py
+Run with: python stages/stage3/activity/starter_workflow.py
 """
 
 from __future__ import annotations
 
+import sys
 import asyncio
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -88,12 +89,8 @@ def store_steps(
 
 CURRICULUM_SERVER = MCPServerStdio(
     params=MCPServerStdioParams(
-        command="uv",
-        args=[
-            "run",
-            "python",
-            "stages/stage2/mcp_servers/curriculum_server.py",
-        ],
+        command=sys.executable,
+        args=[str(REPO_ROOT / "stages/stage2/mcp_servers/curriculum_server.py")],
         cwd=str(REPO_ROOT),
     ),
     cache_tools_list=True,

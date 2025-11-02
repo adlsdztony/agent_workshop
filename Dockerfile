@@ -5,32 +5,29 @@ FROM python:3.11-slim as base
 ENV DEBIAN_FRONTEND=noninteractive \
     PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    UV_NO_SYNC_PROGRESS=1 \
-    UV_PYTHON_BIN=python3.11 \
-    UV_LINK_MODE=copy \
-    PATH="/root/.local/bin:/root/.cargo/bin:${PATH}" \
-    WORKSHOP_HOME=/workspace
+    WORKSHOP_HOME=/workspace \
+    PATH="/root/.local/bin:${PATH}"
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-        curl \
-        ca-certificates \
-        git \
-        build-essential \
-        tini \
-        libssl-dev \
-        libstdc++6 \
+    curl \
+    ca-certificates \
+    git \
+    build-essential \
+    tini \
+    libssl-dev \
+    libstdc++6 \
     && rm -rf /var/lib/apt/lists/*
-
-# Install uv (Rust-based package manager)
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 
 WORKDIR ${WORKSHOP_HOME}
 
-COPY pyproject.toml uv.lock* ./
+COPY pyproject.toml requirements.txt ./
 COPY README.md .
 
 COPY stages ./stages
+
+RUN pip install --upgrade pip setuptools wheel \
+    && pip install --no-cache-dir -r requirements.txt
 
 # Create a non-root user for day-to-day workshop commands.
 RUN useradd -ms /bin/bash workshop \
@@ -38,12 +35,6 @@ RUN useradd -ms /bin/bash workshop \
 
 USER workshop
 WORKDIR ${WORKSHOP_HOME}
-
-# Ensure uv will create environments within the workspace.
-ENV UV_PROJECT_ENVIRONMENT="${WORKSHOP_HOME}/.venv"
-
-# Pre-sync dependencies so containers are ready out of the box.
-RUN uv sync --frozen --no-editable
 
 ENTRYPOINT ["/usr/bin/tini", "--"]
 CMD ["bash"]

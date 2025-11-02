@@ -1,33 +1,29 @@
 services:
-  ollama:
-    image: ollama/ollama:latest
-    ports:
-      - "11434:11434"
-    environment:
-      OLLAMA_HOST: 0.0.0.0
-    volumes:
-      - ollama-data:/root/.ollama
-    restart: unless-stopped
+    ollama:
+        image: ollama/ollama:latest
+        ports:
+            - "11434:11434"
+        environment:
+            OLLAMA_HOST: 0.0.0.0
+        volumes:
+            - ollama-data:/root/.ollama
+        restart: unless-stopped
 
-  workshop:
-    build:
-      context: .
-    image: agent-workshop:latest
-    depends_on:
-      - ollama
-    command: ["bash"]
-    working_dir: /workspace
-    environment:
-      OPENAI_API_KEY: "ollama"
-      OPENAI_BASE_URL: "http://ollama:11434/v1"
-      OLLAMA_HOST: "ollama:11434"
-      UV_PROJECT_ENVIRONMENT: "/workspace/.venv"
-    volumes:
-      - ./:/workspace
-      - uv-cache:/home/workshop/.cache/uv
-    stdin_open: true
-    tty: true
+    workshop:
+        build:
+            context: .
+        depends_on:
+            - ollama
+        command: ["bash"]
+        working_dir: /workspace
+        environment:
+            OPENAI_API_KEY: "ollama"
+            OPENAI_BASE_URL: "http://ollama:11434/v1"
+            OLLAMA_HOST: "ollama:11434"
+        volumes:
+            - ./:/workspace
+        stdin_open: true
+        tty: true
 
 volumes:
-  ollama-data:
-  uv-cache:
+    ollama-data:

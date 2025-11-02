@@ -1,6 +1,6 @@
 """
 Stage 1 demo: minimal agent that uses the built-in LocalShellTool to explore the repo.
-Run with: uv run python stages/stage1/demo.py
+Run with: python stages/stage1/demo.py
 """
 
 from __future__ import annotations

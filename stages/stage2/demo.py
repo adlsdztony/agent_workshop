@@ -1,12 +1,12 @@
 """
 Stage 2 demo: custom FunctionTool + local MCP server.
-Run with: uv run python stages/stage2/demo.py
+Run with: python stages/stage2/demo.py
 """
 
 from __future__ import annotations
 
 import asyncio
-import os
+import sys
 from pathlib import Path
 
 from agents import (
@@ -64,12 +64,8 @@ def find_repo_todos(relative_path: str, limit: int = 5) -> ToolOutputText:
 
 
 CURRICULUM_SERVER_PARAMS = MCPServerStdioParams(
-    command="uv",
-    args=[
-        "run",
-        "python",
-        "stages/stage2/mcp_servers/curriculum_server.py",
-    ],
+    command=sys.executable,
+    args=[str(REPO_ROOT / "stages/stage2/mcp_servers/curriculum_server.py")],
     cwd=str(REPO_ROOT),
     env={"PYTHONPATH": str(REPO_ROOT)},
 )
@@ -109,6 +105,4 @@ async def run_demo() -> None:
 
 
 if __name__ == "__main__":
-    # Ensure uv respects the shared virtual environment when subprocesses spawn.
-    os.environ.setdefault("UV_PROJECT_ENVIRONMENT", str(WORKSPACE_ROOT / ".venv"))
     asyncio.run(run_demo())
