@@ -19,6 +19,8 @@ Environment defaults:
 - `OPENAI_BASE_URL=http://ollama:11434/v1`
 - `OPENAI_API_KEY=ollama`
 
+> GPU requirement: the `ollama` container requests an NVIDIA GPU via Docker Compose. Make sure the NVIDIA container toolkit is installed and your GPU is accessible to Docker before starting the stack.
+
 ### Repository Layout
 
 - `Dockerfile`, `docker-compose.yml` — reproducible environment with Python + Ollama.
