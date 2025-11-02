@@ -5,9 +5,9 @@ Three-stage curriculum for teaching the OpenAI Agents SDK with a locally hosted 
 ### Quickstart
 
 ```bash
-docker compose build          # first run only; pulls Ollama + qwen:30b
 docker compose up -d
-docker compose exec workshop bash
+docker compose exec ollama ollama pull qwen:30b   # first run only; downloads the model
+docker compose exec workshop bash   # Get into the workshop container
 
 # inside the container
 uv sync --frozen

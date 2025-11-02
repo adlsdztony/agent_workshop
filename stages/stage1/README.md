@@ -13,8 +13,8 @@ Build your first OpenAI Agents SDK project end-to-end. By the end of this stage 
 
 ```bash
 # From the repository root
-docker compose build          # (first time only, pulls qwen:30b during the image build)
-docker compose up -d          # starts the Ollama daemon and workshop shell container
+docker compose up -d               # starts the Ollama daemon and workshop shell container
+docker compose exec ollama ollama pull qwen:30b   # (first time only, downloads the model)
 docker compose exec workshop bash
 
 # Inside the container
@@ -22,6 +22,8 @@ uv sync --frozen              # installs dependencies into /workspace/.venv
 uv run --python 3.11 --version
 uv run python --version
 ```
+
+The `ollama pull` command is only required the first time (or when you want to update/swap the model); it downloads `qwen:30b` into the shared volume mounted at `/root/.ollama`.
 
 The compose file wires `OPENAI_BASE_URL=http://ollama:11434/v1`, so the Agents SDK automatically talks to the local Ollama runtime. `OPENAI_API_KEY` is set to the placeholder value `ollama` because the Agents SDK expects a key-shaped secret even when targeting a local endpoint.
 

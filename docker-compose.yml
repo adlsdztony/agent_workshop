@@ -1,15 +1,12 @@
 services:
   ollama:
-    build:
-      context: .
-    image: agent-workshop:latest
-    command: ["ollama", "serve"]
+    image: ollama/ollama:latest
     ports:
       - "11434:11434"
     environment:
-      OLLAMA_HOST: 0.0.0.0:11434
+      OLLAMA_HOST: 0.0.0.0
     volumes:
-      - ollama-data:/var/lib/ollama
+      - ollama-data:/root/.ollama
     restart: unless-stopped
 
   workshop:
