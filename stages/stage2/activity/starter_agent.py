@@ -17,7 +17,7 @@ from agents.mcp import MCPServerStdio, MCPServerStdioParams
 from pydantic import BaseModel, Field
 
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
+REPO_ROOT = Path(__file__).resolve().parents[3]
 
 import sys
 repo_root_str = str(REPO_ROOT)
