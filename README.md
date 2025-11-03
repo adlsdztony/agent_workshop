@@ -8,18 +8,7 @@ Three-stage curriculum for teaching the OpenAI Agents SDK with a locally hosted 
 docker compose up -d
 docker compose exec ollama ollama pull qwen:30b   # first run only; downloads the model
 docker compose exec workshop bash   # Get into the workshop container
-
-# inside the container
-python --version
-pip install -r requirements.txt  # optional if you changed dependencies locally
 ```
-
-Environment defaults:
-
-- `OPENAI_BASE_URL=http://ollama:11434/v1`
-- `OPENAI_API_KEY=ollama`
-
-> GPU requirement: the `ollama` container requests an NVIDIA GPU via Docker Compose. Make sure the NVIDIA container toolkit is installed and your GPU is accessible to Docker before starting the stack.
 
 ### Repository Layout
 
