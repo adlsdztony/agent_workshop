@@ -46,10 +46,10 @@ Open `stages/stage2/demo.py`. It defines:
 2. An MCP server (`curriculum_server.py`) that surfaces structured curriculum knowledge.
 3. An agent that combines both capabilities to answer a higher-level question.
 
-Run it:
+Run it as a module from the repo root:
 
 ```bash
-python stages/stage2/demo.py
+python -m stages.stage2.demo
 ```
 
 You should see streaming traces similar to:
@@ -95,10 +95,10 @@ File: `stages/stage2/activity/starter_agent.py`
 > - Craft system instructions that tell the agent how to juggle both the tool and the MCP data.
 > - Pick an appropriate prompt that causes a single run to produce a coherent lesson plan.
 
-Run the activity:
+Run the activity the same way:
 
 ```bash
-python stages/stage2/activity/starter_agent.py
+python -m stages.stage2.activity.starter_agent
 ```
 
 **Stretch ideas**

@@ -1,6 +1,6 @@
 """
 Stage 3 demo: multi-agent workflow with handoffs and shared context.
-Run with: python stages/stage3/demo.py
+Run with: python -m stages.stage3.demo
 """
 
 from __future__ import annotations
@@ -14,20 +14,15 @@ from typing import Literal
 from agents import (
     Agent,
     ModelSettings,
-    Runner,
     RunContextWrapper,
+    Runner,
     ToolOutputText,
     function_tool,
 )
 from agents.mcp import MCPServerStdio, MCPServerStdioParams
 
-
 WORKSPACE_ROOT = Path("/workspace").resolve()
 REPO_ROOT = Path(__file__).resolve().parents[2]
-
-repo_root_str = str(REPO_ROOT)
-if repo_root_str not in sys.path:
-    sys.path.insert(0, repo_root_str)
 from utils.ollama_adaptor import model
 
 
@@ -140,7 +135,7 @@ async def main() -> None:
             model=model,
             model_settings=ModelSettings(temperature=0.2),
         )
-    
+
         planner_agent = Agent(
             name="Planner Agent",
             handoff_description="Transforms research into a concrete workflow plan.",
@@ -152,7 +147,7 @@ async def main() -> None:
             model=model,
             model_settings=ModelSettings(temperature=0.3),
         )
-    
+
         reviewer_agent = Agent(
             name="Reviewer Agent",
             handoff_description="Stress-tests the workflow, adding guardrails.",
@@ -164,7 +159,7 @@ async def main() -> None:
             model=model,
             model_settings=ModelSettings(temperature=0.1),
         )
-    
+
         coordinator = Agent(
             name="Workflow Coordinator",
             instructions=(
@@ -178,28 +173,28 @@ async def main() -> None:
             model=model,
             model_settings=ModelSettings(temperature=0.05),
         )
-    
+
         prompt = (
             "We need a Stage 3 workflow that prepares learners for multi-agent collaboration. "
             "Follow the coordination plan."
         )
-    
+
         state = WorkflowState()
         print("> Running multi-agent workflow...\n")
         result = await Runner.run(coordinator, prompt, context=state)
-    
+
         print("=== Final Coordinator Output ===")
         print(result.final_output)
-    
+
         print("\n=== Captured Workflow State ===")
         print("- Research notes:")
         for note in state.research_notes:
             print(f"  • {note}")
-    
+
         print("- Action items:")
         for step in state.action_items:
             print(f"  • {step}")
-    
+
         print("- Risks:")
         for risk in state.risks:
             print(f"  • {risk}")

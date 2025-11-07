@@ -1,12 +1,11 @@
 """
 Stage 2 demo: custom FunctionTool + local MCP server.
-Run with: python stages/stage2/demo.py
+Run with: python -m stages.stage2.demo
 """
 
 from __future__ import annotations
 
 import asyncio
-import sys
 from pathlib import Path
 
 from agents import (
@@ -18,12 +17,7 @@ from agents import (
 )
 from agents.mcp import MCPServerStdio, MCPServerStdioParams
 
-repo_root = Path(__file__).resolve().parents[2]
-repo_root_str = str(repo_root)
-if repo_root_str not in sys.path:
-    sys.path.insert(0, repo_root_str)
 from utils.ollama_adaptor import model
-
 
 WORKSPACE_ROOT = Path("/workspace").resolve()
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -72,7 +66,7 @@ def find_repo_todos(relative_path: str, limit: int = 5) -> ToolOutputText:
 CURRICULUM_SERVER_PARAMS = MCPServerStdioParams(
     command="python",
     args=[str(REPO_ROOT / "stages/stage2/mcp_servers/curriculum_server.py")],
-    cwd=str(REPO_ROOT)
+    cwd=str(REPO_ROOT),
 )
 
 

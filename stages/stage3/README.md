@@ -27,10 +27,10 @@ Agents involved:
 3. `ReviewerAgent` — double-checks the plan and suggests guardrails.
 4. `Coordinator` — orchestrates the flow, calling the others via handoffs.
 
-Run the demo:
+Run the demo as a module from the repo root:
 
 ```bash
-python stages/stage3/demo.py
+python -m stages.stage3.demo
 ```
 
 Observe the console output to see which agent handled each step. Compare the final structured workflow against the intermediate messages logged during the run.
@@ -68,10 +68,10 @@ File: `stages/stage3/activity/starter_workflow.py`
 > - Decide which tools each agent needs (reuse Stage 1 & Stage 2 components).
 > - Populate the shared context to capture key facts between stages.
 
-Run your workflow:
+Run your workflow the same way:
 
 ```bash
-python stages/stage3/activity/starter_workflow.py
+python -m stages.stage3.activity.starter_workflow
 ```
 
 **Stretch ideas**

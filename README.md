@@ -25,15 +25,15 @@ Each stage directory contains:
 
 ### Running Examples
 
-Use `python` from inside the workshop container:
+Use `python -m` from inside the workshop container so the repository root stays on `sys.path`:
 
 ```bash
-python stages/stage1/demo.py
-python stages/stage2/demo.py
-python stages/stage3/demo.py
+python -m stages.stage1.demo
+python -m stages.stage2.demo
+python -m stages.stage3.demo
 ```
 
-Activities are inside each stage's `activity/` folder. Follow the TODO markers in the starter scripts.
+Activities are inside each stage's `activity/` folder (`python -m stages.stageX.activity.<script>`). Follow the TODO markers in the starter scripts.
 
 ### Updating Dependencies
 

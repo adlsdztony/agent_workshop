@@ -2,7 +2,7 @@
 Stage 2 activity starter.
 
 Goal: craft a curriculum coach that combines a custom function tool and MCP data.
-Run with: python stages/stage2/activity/starter_agent.py
+Run with: python -m stages.stage2.activity.starter_agent
 """
 
 from __future__ import annotations
@@ -16,13 +16,7 @@ from agents import Agent, ModelSettings, Runner, function_tool
 from agents.mcp import MCPServerStdio, MCPServerStdioParams
 from pydantic import BaseModel, Field
 
-
 REPO_ROOT = Path(__file__).resolve().parents[3]
-
-import sys
-repo_root_str = str(REPO_ROOT)
-if repo_root_str not in sys.path:
-    sys.path.insert(0, repo_root_str)
 from utils.ollama_adaptor import model
 
 
@@ -84,7 +78,6 @@ async def main() -> None:
         cache_tools_list=True,
         name="Curriculum Server",
     ) as curriculum_server:
-
         curriculum_coach = Agent(
             name="Curriculum Coach",
             # TODO: Rewrite the instructions so the agent knows it must call both the custom tool

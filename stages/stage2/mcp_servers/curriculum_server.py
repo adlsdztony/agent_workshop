@@ -2,7 +2,7 @@
 FastMCP server that exposes structured curriculum knowledge for the workshop.
 
 Run manually (optional) with:
-    python stages/stage2/mcp_servers/curriculum_server.py
+    python -m stages.stage2.mcp_servers.curriculum_server
 """
 
 from __future__ import annotations
@@ -10,7 +10,6 @@ from __future__ import annotations
 from typing import Literal
 
 from mcp.server.fastmcp import FastMCP
-
 
 STAGE_SUMMARIES = {
     "stage1": {

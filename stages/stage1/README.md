@@ -35,10 +35,10 @@ The compose file wires `OPENAI_BASE_URL=http://ollama:11434/v1`, so the Agents S
 
 ## 3. Walkthrough Example
 
-Open `stages/stage1/demo.py` — it contains a fully working minimal agent. The important parts are annotated inline. Run it with:
+Open `stages/stage1/demo.py` — it contains a fully working minimal agent. The important parts are annotated inline. Run it as a module from the repo root so shared utilities are importable without hacks:
 
 ```bash
-python stages/stage1/demo.py
+python -m stages.stage1.demo
 ```
 
 Expected output (trimmed):
@@ -73,10 +73,10 @@ File: `stages/stage1/activity/starter_agent.py`
 > - Adjusts the whitelist if it needs additional commands (e.g. `cat Dockerfile`).
 > - Formats the final output as a Markdown checklist.
 
-Run your agent with:
+Run your agent the same way:
 
 ```bash
-python stages/stage1/activity/starter_agent.py
+python -m stages.stage1.activity.starter_agent
 ```
 
 **Stretch ideas**

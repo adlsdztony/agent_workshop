@@ -2,13 +2,13 @@
 Stage 3 activity starter.
 
 Objective: orchestrate a deployment workflow with multiple specialised agents.
-Run with: python stages/stage3/activity/starter_workflow.py
+Run with: python -m stages.stage3.activity.starter_workflow
 """
 
 from __future__ import annotations
 
-import sys
 import asyncio
+import sys
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Literal
@@ -16,21 +16,16 @@ from typing import Literal
 from agents import (
     Agent,
     ModelSettings,
-    Runner,
     RunContextWrapper,
+    Runner,
     ToolOutputText,
     function_tool,
 )
 from agents.mcp import MCPServerStdio, MCPServerStdioParams
 from pydantic import BaseModel
 
-
 WORKSPACE_ROOT = Path("/workspace").resolve()
 REPO_ROOT = Path(__file__).resolve().parents[3]
-
-repo_root_str = str(REPO_ROOT)
-if repo_root_str not in sys.path:
-    sys.path.insert(0, repo_root_str)
 from utils.ollama_adaptor import model
 
 
@@ -63,7 +58,7 @@ def store_steps(
     else:
         ctx.context.validation_plan = steps
     return ToolOutputText(text=f"Stored {len(steps)} steps under {category}.")
-    
+
 
 CURRICULUM_SERVER_PARAMS = MCPServerStdioParams(
     command=sys.executable,
@@ -72,6 +67,7 @@ CURRICULUM_SERVER_PARAMS = MCPServerStdioParams(
 )
 
 async def main() -> None:
+
     state = DeploymentState()
     async with MCPServerStdio(
         params=CURRICULUM_SERVER_PARAMS,
@@ -83,12 +79,12 @@ async def main() -> None:
             name="Preflight Agent",
             handoff_description="Validates configuration before deployment.",
             instructions="Rewrite me with detailed preflight guidance.",
-            tools=[], 
+            tools=[],
             mcp_servers=[curriculum_server],
             model=model,
             model_settings=ModelSettings(temperature=0.2),
         )
-    
+
         execution_agent = Agent(
             name="Execution Agent",
             handoff_description="Drafts deployment steps.",
@@ -97,7 +93,7 @@ async def main() -> None:
             model=model,
             model_settings=ModelSettings(temperature=0.25),
         )
-    
+
         validation_agent = Agent(
             name="Validation Agent",
             handoff_description="Defines validation criteria and rollback triggers.",
@@ -106,7 +102,7 @@ async def main() -> None:
             model=model,
             model_settings=ModelSettings(temperature=0.15),
         )
-    
+
         coordinator = Agent(
             name="Deployment Coordinator",
             instructions=(
@@ -118,18 +114,18 @@ async def main() -> None:
             model_settings=ModelSettings(temperature=0.05),
             output_type=DeploymentWorkflow,
         )
-    
+
         request = (
             "Prepare a deployment workflow for the agent workshop sample project. "
             "Highlight risks tied to the custom MCP server."
         )
-    
+
         result = await Runner.run(coordinator, request, context=state)
         workflow = result.final_output_as(DeploymentWorkflow)
-    
+
         print("\n=== Deployment Workflow ===")
         print(workflow.model_dump_json(indent=2))
-    
+
         print("\n=== Shared State Snapshot ===")
         print(f"Preflight logs: {state.preflight_logs}")
         print(f"Deployment steps: {state.deployment_steps}")
