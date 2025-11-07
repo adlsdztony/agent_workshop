@@ -41,6 +41,8 @@ Open `stages/stage1/demo.py` — it contains a fully working minimal agent. The 
 python -m stages.stage1.demo
 ```
 
+Add `--verbose` to stream the agent's lifecycle events (tool calls, handoffs, LLM invocations) while debugging.
+
 Expected output (trimmed):
 
 ```
@@ -78,6 +80,8 @@ Run your agent the same way:
 ```bash
 python -m stages.stage1.activity.starter_agent
 ```
+
+Use `--verbose` here as well if you want to watch the shell/tool calls as they happen.
 
 **Stretch ideas**
 

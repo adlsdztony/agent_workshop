@@ -33,7 +33,7 @@ python -m stages.stage2.demo
 python -m stages.stage3.demo
 ```
 
-Activities are inside each stage's `activity/` folder (`python -m stages.stageX.activity.<script>`). Follow the TODO markers in the starter scripts.
+Append `--verbose` to any demo/activity command (e.g. `python -m stages.stage1.demo --verbose`) to stream agent lifecycle events, including tool calls and handoffs. Activities are inside each stage's `activity/` folder (`python -m stages.stageX.activity.<script>`). Follow the TODO markers in the starter scripts.
 
 ### Updating Dependencies
 

@@ -52,6 +52,8 @@ Run it as a module from the repo root:
 python -m stages.stage2.demo
 ```
 
+Pass `--verbose` to watch the agent trace (LLM calls, tool invocations, MCP requests) in real time.
+
 You should see streaming traces similar to:
 
 ```
@@ -100,6 +102,8 @@ Run the activity the same way:
 ```bash
 python -m stages.stage2.activity.starter_agent
 ```
+
+The optional `--verbose` flag is helpful while debugging your custom tool/MCP orchestration.
 
 **Stretch ideas**
 

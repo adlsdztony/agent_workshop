@@ -17,6 +17,7 @@ from agents import (
 )
 from agents.mcp import MCPServerStdio, MCPServerStdioParams
 
+from utils.cli import build_verbose_hooks, parse_common_args
 from utils.ollama_adaptor import model
 
 WORKSPACE_ROOT = Path("/workspace").resolve()
@@ -70,7 +71,8 @@ CURRICULUM_SERVER_PARAMS = MCPServerStdioParams(
 )
 
 
-async def run_demo() -> None:
+async def run_demo(verbose: bool = False) -> None:
+    hooks = build_verbose_hooks(verbose)
     async with MCPServerStdio(
         params=CURRICULUM_SERVER_PARAMS,
         cache_tools_list=True,
@@ -96,11 +98,12 @@ async def run_demo() -> None:
         )
 
         print("> Running Curriculum Mentor...\n")
-        result = await Runner.run(mentor, prompt)
+        result = await Runner.run(mentor, prompt, hooks=hooks)
 
         print("\n=== Final Answer ===")
         print(result.final_output)
 
 
 if __name__ == "__main__":
-    asyncio.run(run_demo())
+    args = parse_common_args(__doc__)
+    asyncio.run(run_demo(verbose=args.verbose))

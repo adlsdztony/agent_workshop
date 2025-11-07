@@ -24,6 +24,8 @@ from agents import (
 from agents.mcp import MCPServerStdio, MCPServerStdioParams
 from pydantic import BaseModel
 
+from utils.cli import build_verbose_hooks, parse_common_args
+
 WORKSPACE_ROOT = Path("/workspace").resolve()
 REPO_ROOT = Path(__file__).resolve().parents[3]
 from utils.ollama_adaptor import model
@@ -66,8 +68,9 @@ CURRICULUM_SERVER_PARAMS = MCPServerStdioParams(
     cwd=str(REPO_ROOT),
 )
 
-async def main() -> None:
 
+async def main(verbose: bool = False) -> None:
+    hooks = build_verbose_hooks(verbose)
     state = DeploymentState()
     async with MCPServerStdio(
         params=CURRICULUM_SERVER_PARAMS,
@@ -120,7 +123,7 @@ async def main() -> None:
             "Highlight risks tied to the custom MCP server."
         )
 
-        result = await Runner.run(coordinator, request, context=state)
+        result = await Runner.run(coordinator, request, context=state, hooks=hooks)
         workflow = result.final_output_as(DeploymentWorkflow)
 
         print("\n=== Deployment Workflow ===")
@@ -133,4 +136,5 @@ async def main() -> None:
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    args = parse_common_args(__doc__)
+    asyncio.run(main(verbose=args.verbose))

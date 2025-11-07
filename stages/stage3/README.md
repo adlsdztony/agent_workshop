@@ -33,6 +33,8 @@ Run the demo as a module from the repo root:
 python -m stages.stage3.demo
 ```
 
+Append `--verbose` to see every agent handoff, tool call, and LLM invocation as the workflow runs.
+
 Observe the console output to see which agent handled each step. Compare the final structured workflow against the intermediate messages logged during the run.
 
 ### Highlights
@@ -73,6 +75,8 @@ Run your workflow the same way:
 ```bash
 python -m stages.stage3.activity.starter_workflow
 ```
+
+`--verbose` is especially helpful here to confirm the coordinator delegates work in the order you expect.
 
 **Stretch ideas**
 

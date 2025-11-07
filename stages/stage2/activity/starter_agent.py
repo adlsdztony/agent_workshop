@@ -16,6 +16,8 @@ from agents import Agent, ModelSettings, Runner, function_tool
 from agents.mcp import MCPServerStdio, MCPServerStdioParams
 from pydantic import BaseModel, Field
 
+from utils.cli import build_verbose_hooks, parse_common_args
+
 REPO_ROOT = Path(__file__).resolve().parents[3]
 from utils.ollama_adaptor import model
 
@@ -72,7 +74,8 @@ CURRICULUM_SERVER_PARAMS = MCPServerStdioParams(
 )
 
 
-async def main() -> None:
+async def main(verbose: bool = False) -> None:
+    hooks = build_verbose_hooks(verbose)
     async with MCPServerStdio(
         params=CURRICULUM_SERVER_PARAMS,
         cache_tools_list=True,
@@ -96,7 +99,7 @@ async def main() -> None:
         # TODO: Provide a richer user prompt (e.g. include a target audience and learning depth).
         query = "Generate a lesson plan for stage2 using the theme 'collaboration'."
 
-        result = await Runner.run(curriculum_coach, query)
+        result = await Runner.run(curriculum_coach, query, hooks=hooks)
         lesson_plan = result.final_output_as(LessonPlan)
 
         print("\n=== Lesson Plan (JSON) ===")
@@ -104,4 +107,5 @@ async def main() -> None:
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    args = parse_common_args(__doc__)
+    asyncio.run(main(verbose=args.verbose))

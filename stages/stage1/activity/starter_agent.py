@@ -9,16 +9,14 @@ from __future__ import annotations
 
 import asyncio
 
-from agents import (
-    Agent,
-    ModelSettings,
-    Runner,
-)
+from agents import Agent, ModelSettings, Runner
 
+from utils.cli import build_verbose_hooks, parse_common_args
 from utils.ollama_adaptor import model
 
 
-async def run_activity() -> None:
+async def run_activity(verbose: bool = False) -> None:
+    hooks = build_verbose_hooks(verbose)
     # TODO: rewrite the instructions so the agent understands the reporting goal.
     project_scout = Agent(
         name="Project Scout",
@@ -32,10 +30,15 @@ async def run_activity() -> None:
     )
 
     # TODO: adjust the question to focus the agent on the reporting task you designed.
-    result = await Runner.run(project_scout, "Draft the initial project scout report.")
+    result = await Runner.run(
+        project_scout,
+        "Draft the initial project scout report.",
+        hooks=hooks,
+    )
     print("\n=== Agent Report ===")
     print(result.final_output)
 
 
 if __name__ == "__main__":
-    asyncio.run(run_activity())
+    args = parse_common_args(__doc__)
+    asyncio.run(run_activity(verbose=args.verbose))

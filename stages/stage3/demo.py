@@ -21,6 +21,8 @@ from agents import (
 )
 from agents.mcp import MCPServerStdio, MCPServerStdioParams
 
+from utils.cli import build_verbose_hooks, parse_common_args
+
 WORKSPACE_ROOT = Path("/workspace").resolve()
 REPO_ROOT = Path(__file__).resolve().parents[2]
 from utils.ollama_adaptor import model
@@ -33,7 +35,6 @@ class WorkflowState:
     research_notes: list[str] = field(default_factory=list)
     action_items: list[str] = field(default_factory=list)
     risks: list[str] = field(default_factory=list)
-
 
 
 def _resolve_relative_path(relative_path: str) -> Path:
@@ -115,13 +116,13 @@ CURRICULUM_SERVER_PARAMS = MCPServerStdioParams(
 )
 
 
-async def main() -> None:
+async def main(verbose: bool = False) -> None:
+    hooks = build_verbose_hooks(verbose)
     async with MCPServerStdio(
         params=CURRICULUM_SERVER_PARAMS,
         cache_tools_list=True,
         name="Curriculum Server",
     ) as curriculum_server:
-    
         research_agent = Agent(
             name="Research Agent",
             handoff_description="Gathers repository signals and curriculum facts.",
@@ -181,7 +182,7 @@ async def main() -> None:
 
         state = WorkflowState()
         print("> Running multi-agent workflow...\n")
-        result = await Runner.run(coordinator, prompt, context=state)
+        result = await Runner.run(coordinator, prompt, context=state, hooks=hooks)
 
         print("=== Final Coordinator Output ===")
         print(result.final_output)
@@ -201,4 +202,5 @@ async def main() -> None:
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    args = parse_common_args(__doc__)
+    asyncio.run(main(verbose=args.verbose))
