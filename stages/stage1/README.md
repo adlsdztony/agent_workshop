@@ -12,7 +12,7 @@ Stage 0 confirmed the SDK wiring with a mock weather tool. Stage 1 levels up by 
 
 Implementation: `utils/bash_tool.py`
 
-- Accepts commands like `ls`, `pwd`, `cat`, `head`, `tail`, `stat`.
+- Accepts commands like `ls`, `pwd`, `cat`, `head`, `tail`, `stat`, `wc`, `find`, `grep`.
 - Validates that every argument stays under `/workspace`.
 - Uses `subprocess.run(..., timeout=5, capture_output=True)` so results are streamed back safely.
 - Returns a `ToolOutputText` payload summarising stdout/stderr plus the exit code.
@@ -30,7 +30,7 @@ File: `stages/stage1/demo.py`
 Run it:
 
 ```bash
-python -m stages.stage1.demo
+python -m stages.stage1.demo --verbose
 # append --verbose to stream the tool calls in real time
 ```
 
@@ -51,5 +51,12 @@ The starter already wires `run_bash_command` into the agent. Your tasks:
 - Re-write the system instructions so the agent knows the required sections and when to call the tool.
 - Expand the allowlist or timeout (in `utils/bash_tool.py`) if your scenario needs extra commands.
 - Craft a focused user prompt (the placeholder “Draft the initial project scout report.” is just a stub).
+
+To run your agent:
+
+```bash
+python -m stages.stage1.activity.starter_agent --verbose
+# append --verbose to stream the tool calls in real time
+```
 
 Once this stage feels comfortable, continue to Stage 2 to combine custom tools with a FastMCP server.

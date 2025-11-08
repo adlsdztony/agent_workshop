@@ -13,7 +13,7 @@ Stage 0 is a quick orientation so learners can confirm the workshop environment,
 The demo lives in `stages/stage0/demo.py` and simply answers a weather question using a mocked tool.
 
 ```bash
-python -m stages.stage0.demo
+python -m stages.stage0.demo --verbose
 # add --verbose to stream lifecycle events
 ```
 

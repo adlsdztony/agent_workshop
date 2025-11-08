@@ -23,10 +23,11 @@ from agents.mcp import MCPServerStdio, MCPServerStdioParams
 
 from utils.cli import build_verbose_hooks, parse_common_args
 from utils.bash_tool import run_bash_command
+from utils.ollama_adaptor import model
+
 
 WORKSPACE_ROOT = Path("/workspace").resolve()
 REPO_ROOT = Path(__file__).resolve().parents[2]
-from utils.ollama_adaptor import model
 
 
 @dataclass

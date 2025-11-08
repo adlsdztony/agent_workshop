@@ -17,9 +17,10 @@ from agents.mcp import MCPServerStdio, MCPServerStdioParams
 from pydantic import BaseModel, Field
 
 from utils.cli import build_verbose_hooks, parse_common_args
+from utils.ollama_adaptor import model
+
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
-from utils.ollama_adaptor import model
 
 
 class LessonPlan(BaseModel):
