@@ -40,17 +40,19 @@ You should see the agent call `bash.run` a few times before composing the final 
 
 File: `stages/stage1/activity/starter_agent.py`
 
-Goal: design a “project scout” agent that:
+Goal: design a "workshop analyzer" agent that:
 
-1. Uses `bash.run` to gather filesystem evidence.
-2. Produces a Markdown checklist covering root directories, Dockerfile status, and a recommended next command.
-3. Explains which shell commands were executed (for auditability).
+1. Uses `bash.run` to explore the workshop codebase structure.
+2. Reads and analyzes README files across all stages to understand their content.
+3. Produces a comprehensive Markdown summary of what each stage teaches.
+4. Provides brief previews of stages 2 and 3 content.
+5. Cites the files and commands used for information gathering.
 
 The starter already wires `run_bash_command` into the agent. Your tasks:
 
-- Re-write the system instructions so the agent knows the required sections and when to call the tool.
+- Re-write the system instructions so the agent knows to analyze workshop content and structure.
 - Expand the allowlist or timeout (in `utils/bash_tool.py`) if your scenario needs extra commands.
-- Craft a focused user prompt (the placeholder “Draft the initial project scout report.” is just a stub).
+- Craft a focused user prompt (the placeholder "Analyze this workshop codebase..." is already provided).
 
 To run your agent:
 
