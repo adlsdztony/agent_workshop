@@ -184,7 +184,6 @@ async def run_activity(verbose: bool = False) -> None:
             "3. Call `write.file` with the `start_line`/`end_line` parameters to perform\n"
             "   targeted replacements inside the file.\n"
             "4. Verify the change by re-reading the file\n"
-            # "   `python -m stages.stage1.activity.code_task` via `bash.run`.\n"
             "5. In your final response, summarize what you changed and cite the specific\n"
             "   commands/tools that informed your work."
         ),
@@ -204,6 +203,7 @@ async def run_activity(verbose: bool = False) -> None:
             f"{TASK_FILE}, then explain how the result satisfies the requirements."
         ),
         hooks=hooks,
+        max_turns=50,
     )
     print("\n=== Agent Report ===")
     print(result.final_output)

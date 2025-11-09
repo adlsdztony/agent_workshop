@@ -29,11 +29,6 @@ COPY stages ./stages
 RUN pip install --upgrade pip setuptools wheel \
     && pip install --no-cache-dir -r requirements.txt
 
-# Create a non-root user for day-to-day workshop commands.
-RUN useradd -ms /bin/bash workshop \
-    && chown -R workshop:workshop ${WORKSHOP_HOME}
-
-USER workshop
 WORKDIR ${WORKSHOP_HOME}
 
 ENTRYPOINT ["/usr/bin/tini", "--"]
