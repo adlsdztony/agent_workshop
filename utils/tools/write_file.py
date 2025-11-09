@@ -7,7 +7,7 @@ from utils.workspace_path import resolve_workspace_path
 
 
 WORKSPACE_ROOT = Path("/workspace").resolve()
-TASK_FILE = "stages/stage1/activity/code_task.py"
+TASK_FILE = "stages/stage1/activity/test_read_file.py"
 
 def _replace_line_range(
     original: str, start_line: int, end_line: int, new_block: str

@@ -1,0 +1,5 @@
+Stage 1 Workshop Notes
+Understand the repo layout
+Implement the read.file tool
+Add truncation safeguards
+Celebrate the win

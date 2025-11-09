@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-
 from agents import ToolOutputText, function_tool
 from utils.workspace_path import resolve_workspace_path
 
@@ -15,48 +14,23 @@ def read_text_file(
     """
     Read a workspace file and show line numbers for easier surgical edits.
 
-    Activity author note: delete the implementation below this docstring to hand
-    learners a partially completed read tool.
+    Implement this tool by:
+
+    1. Resolving ``path`` through ``resolve_workspace_path`` (with
+       ``ensure_parent=False`` so reading brand new files is allowed).
+    2. Handling missing files, unreadable files, and empty files gracefully by
+       returning a descriptive ``ToolOutputText``.
+    3. Supporting optional ``start_line``/``end_line`` parameters that return
+       only the requested slice once validated.
+    4. Numbering each emitted line and clamping the overall response to
+       ``max_output_chars`` characters, adding ``...`` when truncated.
+
+    Delete the temporary return value below once you have a real
+    implementation.
     """
-    try:
-        target = resolve_workspace_path(path, ensure_parent=False)
-    except ValueError as exc:
-        return ToolOutputText(text=str(exc))
-
-    if not target.exists():
-        return ToolOutputText(text=f"{path} does not exist.")
-
-    try:
-        text = target.read_text(encoding="utf-8")
-    except OSError as exc:
-        return ToolOutputText(text=f"Failed to read file: {exc}")
-
-    lines = text.splitlines()
-    total_lines = len(lines)
-    if total_lines == 0:
-        return ToolOutputText(text="(file is empty)")
-
-    if start_line is None and end_line is None:
-        start = 1
-        end = total_lines
-    else:
-        if start_line is None:
-            return ToolOutputText(text="Provide start_line when using end_line.")
-        if start_line < 1 or (end_line is not None and end_line < start_line):
-            return ToolOutputText(text="Line numbers must increase.")
-        start = start_line
-        end = end_line if end_line is not None else start_line
-        if end > total_lines:
-            return ToolOutputText(
-                text=f"File only has {total_lines} lines; requested {end}."
-            )
-
-    numbered = []
-    for idx in range(start, end + 1):
-        line_text = lines[idx - 1] if idx - 1 < total_lines else ""
-        numbered.append(f"{idx:>4}: {line_text}")
-
-    result = "\n".join(numbered)
-    if len(result) > max_output_chars:
-        result = result[: max_output_chars - 3] + "..."
-    return ToolOutputText(text=result)
+    return ToolOutputText(
+        text=(
+            "read.file is not implemented yet. Open utils/tools/read_file.py "
+            "and follow the docstring instructions."
+        )
+    )

@@ -7,7 +7,7 @@ from pathlib import Path
 from agents import ToolOutputText, function_tool
 
 WORKSPACE_ROOT = Path("/workspace").resolve()
-ALLOWED_COMMANDS = {"ls", "pwd", "cat", "head", "tail", "stat", "wc", "find", "grep"}
+ALLOWED_COMMANDS = {"ls", "pwd", "cat", "head", "tail", "stat", "wc", "find", "grep", "sed"}
 
 
 def _build_command_args(command: str) -> list[str]:
@@ -40,7 +40,7 @@ def run_bash_command(
     max_output_chars: int = 4000,
 ) -> ToolOutputText:
     """
-    Execute a limited bash command (ls, pwd, cat, head, tail, stat) inside the workspace.
+    Execute a limited bash command (ls, pwd, cat, head, tail, stat, wc, find, grep, sed) inside the workspace.
 
     Args:
         command: Full command line, e.g. "ls stages".

@@ -1,31 +1,25 @@
-# Stage 1 · Custom Bash Tool
+# Stage 1 · Build the Read Tool
 
-Stage 0 confirmed the SDK wiring with a mock weather tool. Stage 1 levels up by letting the model run *real* shell commands via a bespoke `@function_tool` that enforces a tight allowlist.
+Stage 0 confirmed the SDK wiring with a mock tool. Stage 1 keeps the momentum
+by pairing a real shell tool demo with an activity where you implement the
+`read.file` helper that every later stage relies on.
 
 ## Learning Goals
 
-- Wrap subprocess calls with `function_tool` and return structured `ToolOutputText`.
-- Enforce guardrails (command allowlist, workspace path checks, timeouts, truncation).
-- Guide an agent so it calls the tool deliberately and reports what it executed.
+- Wrap subprocess calls with `function_tool` and return structured
+  `ToolOutputText` payloads.
+- Enforce guardrails: workspace-only file access, short timeouts, trimmed output.
+- Teach an agent how to read source files safely so it can reason about edits
+  before writing.
 
-## 1. The `bash.run` Tool
-
-Implementation: `utils/bash_tool.py`
-
-- Accepts commands like `ls`, `pwd`, `cat`, `head`, `tail`, `stat`, `wc`, `find`, `grep`.
-- Validates that every argument stays under `/workspace`.
-- Uses `subprocess.run(..., timeout=5, capture_output=True)` so results are streamed back safely.
-- Returns a `ToolOutputText` payload summarising stdout/stderr plus the exit code.
-
-Feel free to extend the allowlist or the output formatting once you are comfortable with the basics.
-
-## 2. Demo Walkthrough
+## 1. Demo · `bash.run`
 
 File: `stages/stage1/demo.py`
 
-- Imports `run_bash_command` and exposes it to the agent as the `bash.run` tool.
-- Instructions remind the model to cite the commands it used.
-- The prompt asks for: root directories, Dockerfile presence, and a suggested next command.
+- Exposes `utils/tools/bash.py::run_bash_command` as the `bash.run` tool.
+- The prompt asks for: root directories, Dockerfile presence, and a suggested
+  next command.
+- Shows how to cite executed commands in the final report.
 
 Run it:
 
@@ -34,49 +28,48 @@ python -m stages.stage1.demo --verbose
 # append --verbose to stream the tool calls in real time
 ```
 
-You should see the agent call `bash.run` a few times before composing the final answer.
-
-## 3. Activity
+## 2. Activity · Implement `read.file`
 
 Files:
 
-- `stages/stage1/activity/starter_agent.py`
-- `stages/stage1/activity/code_task.py`
+- `utils/tools/read_file.py` — where you will implement the tool body.
+- `stages/stage1/activity/test_read_file.py` — executable spec and smoke test.
+- `stages/stage1/activity/starter_agent.py` — an agent harness that can edit
+  the tool using the provided `bash.run` and `write.file` helpers.
 
-Goal: build a "write-enabled" agent that can inspect the repository, add its
-own `read.file`/`write.file` tools, and then use them to finish the coding task
-inside `code_task.py`.
+### Requirements for `read.file`
 
-### What to Build
+The `@function_tool` in `utils/tools/read_file.py` should:
 
-1. Implement a `read.file` function tool that:
-   - Prints numbered lines (with optional `start_line`/`end_line` arguments).
-   - Enforces the same workspace guardrails as `bash.run`.
-2. Implement a `write.file` function tool that:
-   - Writes UTF-8 text to files under `/workspace`.
-   - Supports an `overwrite` mode (default) and an `append` mode.
-   - Accepts optional `start_line`/`end_line` parameters to replace only a
-     slice of the file.
-   - Rejects attempts to escape the workspace or overwrite directories.
-3. Guide the agent (via system/user instructions) to:
-   - Read `code_task.py` with `bash.run`/`read.file` to understand the
-     specification for `format_stage_report`.
-   - Plan the change before writing.
-   - Call `write.file` with the *entire* new file contents or use a precise
-     line-range replacement to implement the function.
-   - Optionally run `python -m stages.stage1.activity.code_task` to preview the
-     behavior once implemented.
-4. Summarize the work, citing any files or commands used.
+1. Accept a repo-relative `path` plus optional `start_line`, `end_line`, and a
+   `max_output_chars` clamp (default 4000 characters).
+2. Resolve the target via `utils.workspace_path.resolve_workspace_path` so
+   callers cannot escape `/workspace`.
+3. Emit numbered lines to make surgical edits easier. When no line range is
+   provided, show the full file; when a range is given, validate that it is
+   increasing and inside the file.
+4. Gracefully handle empty files, missing files, and OS errors by returning a
+   descriptive `ToolOutputText`.
+5. Truncate overly long responses and append `...` so outputs never exceed the
+   `max_output_chars` budget.
 
-The starter already wires `run_bash_command` into the agent. Update the system
-instructions and user prompt so the agent focuses on finishing `code_task.py`.
+### Workflow
 
-Run your agent with:
+1. Inspect `utils/tools/read_file.py` to understand the scaffolding.
+2. Run `python -m stages.stage1.activity.starter_agent --verbose` to let the
+   agent help you reason about the change (it only has `bash.run` and
+   `write.file`, so you may see it using shell commands until `read.file`
+   works).
+3. Once the tool is implemented, run the smoke test:
 
-```bash
-python -m stages.stage1.activity.starter_agent --verbose
-# append --verbose to stream the tool calls in real time
-```
+   ```bash
+   python -m stages.stage1.activity.test_read_file --verbose
+   ```
 
-Once this stage feels comfortable, continue to Stage 2 to combine custom tools
-with a FastMCP server.
+   This spins up a tiny QA agent that calls `read.file` against sample files and
+   a missing-file edge case; the `--verbose` flag lets you watch the tool calls.
+4. Commit when you are happy, then move on to Stage 2 to combine custom tools
+   with a FastMCP server.
+
+`write.file` and `bash.run` are already implemented for you. Focus entirely on
+getting `read.file` production-ready.

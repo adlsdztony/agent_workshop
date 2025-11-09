@@ -1,8 +1,9 @@
 """
 Stage 1 activity starter.
 
-Goal: build a write-enabled agent that implements the task in
-`stages/stage1/activity/code_task.py` using a custom write tool.
+Goal: help the agent implement the `read.file` tool in
+`utils/tools/read_file.py` using the provided `bash.run` and `write.file`
+helpers.
 Run with: python -m stages.stage1.activity.starter_agent --verbose
 """
 
@@ -16,27 +17,28 @@ from utils.tools import run_bash_command, read_text_file, write_text_file
 from utils.cli import build_verbose_hooks, parse_common_args
 from utils.ollama_adaptor import model
 
-TASK_FILE = "stages/stage1/activity/code_task.py"
+TASK_FILE = "utils/tools/read_file.py"
 
 async def run_activity(verbose: bool = False) -> None:
     hooks = build_verbose_hooks(verbose)
     write_agent = Agent(
-        name="Workshop Write Coach",
+        name="Read Tool Coach",
         instructions=(
             "You finish coding chores inside this repository.\n"
-            f"Focus file: `{TASK_FILE}`. Implement `format_stage_report` to match the\n"
-            "spec in that file by calling the provided tools.\n\n"
+            f"Focus file: `{TASK_FILE}`. Implement the read.file tool described in that\n"
+            "module so future stages can inspect files safely.\n\n"
             "Workflow:\n"
-            f"1. Use `read.file`\n"
-            "   (with optional line ranges) to read the task and gather any additional\n"
-            "   context you need.\n"
+            "1. Use `bash.run` commands like `sed -n '1,160p'` to inspect the current\n"
+            "   file since `read.file` is not ready yet.\n"
             "2. Outline your plan before editing so the reviewer understands your\n"
             "   approach.\n"
-            "3. Call `write.file` with the `start_line`/`end_line` parameters to perform\n"
-            "   targeted replacements inside the file.\n"
-            "4. Verify the change by re-reading the file\n"
-            "5. In your final response, summarize what you changed and cite the specific\n"
-            "   commands/tools that informed your work."
+            "3. Call `write.file` with `start_line`/`end_line` to perform targeted\n"
+            "   replacements inside the file.\n"
+            "4. Once the implementation is in place you may call `read.file` to double\n"
+            "   check the result.\n"
+            "5. In your final response, summarize what you changed, cite any commands\n"
+            "   you executed, and mention how to run the smoke test in\n"
+            "   `stages/stage1/activity/test_read_file.py`."
         ),
         tools=[
             run_bash_command,
@@ -50,8 +52,11 @@ async def run_activity(verbose: bool = False) -> None:
     result = await Runner.run(
         write_agent,
         (
-            "Use the read.file and write.file tools to implement format_stage_report in "
-            f"{TASK_FILE}, then explain how the result satisfies the requirements."
+            "Implement `read_text_file` in {TASK_FILE} so that the read.file function\n"
+            "returns numbered lines, supports optional line ranges, respects\n"
+            "resolve_workspace_path, and trims long outputs. Once you are satisfied,\n"
+            "explain how it matches the requirements and how to verify it by running\n"
+            "`python -m stages.stage1.activity.test_read_file`."
         ),
         hooks=hooks,
         max_turns=50,
