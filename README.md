@@ -1,12 +1,12 @@
 ## Agent Workshop · Ollama + OpenAI Agents SDK
 
-Four-stage curriculum (Stage 0–3) for teaching the OpenAI Agents SDK with a locally hosted `qwen3:30b` model (Ollama) and a reproducible Docker + Python virtual environment.
+Four-stage curriculum (Stage 0–3) for teaching the OpenAI Agents SDK with a locally hosted `qwen3-coder:30b` model (Ollama) and a reproducible Docker + Python virtual environment.
 
 ### Quickstart
 
 ```bash
 docker compose up -d
-docker compose exec ollama ollama pull qwen3:30b   # first run only; downloads the model
+docker compose exec ollama ollama pull qwen3-coder:30b   # first run only; downloads the model
 docker compose exec workshop bash   # Get into the workshop container
 ```
 
