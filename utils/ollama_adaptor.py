@@ -49,10 +49,10 @@ def _patch_openai_model_for_think_flag() -> None:
     @wraps(original_fetch)
     async def _fetch_response_with_disabled_think(*args, **kwargs):
         model_settings = kwargs.get("model_settings")
-        if model_settings is None and len(args) >= 3:
-            model_settings = args[2]
+        if model_settings is None and len(args) >= 4:
+            model_settings = args[3]
 
-        if model_settings is not None:
+        if model_settings is not None and hasattr(model_settings, "extra_body"):
             model_settings.extra_body = _ensure_think_disabled(
                 model_settings.extra_body
             )
