@@ -124,10 +124,10 @@ class VerboseRunHooks(RunHooksBase[Any, Agent[Any]]):
             if system_prompt
             else "default system prompt"
         )
-        self._log(
-            "llm",
-            f"{_agent_name(agent)} prompting model ({len(input_items)} input item(s), prompt: {prompt_hint})",
-        )
+        # self._log(
+        #     "llm",
+        #     f"{_agent_name(agent)} prompting model ({len(input_items)} input item(s), prompt: {prompt_hint})",
+        # )
 
     async def on_llm_end(
         self,

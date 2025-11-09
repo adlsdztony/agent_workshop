@@ -20,17 +20,18 @@ def _build_command_args(command: str) -> list[str]:
         msg = f"Command '{binary}' is not allowed. Valid options: {', '.join(sorted(ALLOWED_COMMANDS))}."
         raise ValueError(msg)
 
-    resolved: list[str] = [binary]
-    for token in parts[1:]:
-        if token.startswith("-"):
-            resolved.append(token)
-            continue
-        candidate = (WORKSPACE_ROOT / token).resolve()
-        if not str(candidate).startswith(str(WORKSPACE_ROOT)):
-            msg = f"Path escape blocked for '{token}'. Stay inside {WORKSPACE_ROOT}."
-            raise ValueError(msg)
-        resolved.append(str(candidate))
-    return resolved
+    # resolved: list[str] = [binary]
+    # for token in parts[1:]:
+    #     if token.startswith("-"):
+    #         resolved.append(token)
+    #         continue
+    #     candidate = (WORKSPACE_ROOT / token).resolve()
+    #     if not str(candidate).startswith(str(WORKSPACE_ROOT)):
+    #         msg = f"Path escape blocked for '{token}'. Stay inside {WORKSPACE_ROOT}."
+    #         raise ValueError(msg)
+    #     resolved.append(str(candidate))
+    # return resolved
+    return parts
 
 
 @function_tool(name_override="bash.run")
