@@ -4,6 +4,13 @@ Four-stage curriculum (Stage 0–3) for teaching the OpenAI Agents SDK with a lo
 
 ### Quickstart
 
+Clone the repository:
+```bash
+git clone https://github.com/HKUGenAI/agent_workshop.git
+cd agent_workshop
+```
+
+Set up the Docker environment:
 ```bash
 docker compose up -d
 docker compose exec ollama ollama pull qwen3-coder:30b   # first run only; downloads the model
@@ -37,17 +44,6 @@ python -m stages.stage3.demo
 ```
 
 Append `--verbose` to any demo/activity command (e.g. `python -m stages.stage1.demo --verbose`) to stream agent lifecycle events, including tool calls and handoffs. Activities are inside each stage's `activity/` folder (`python -m stages.stageX.activity.<script>`). Follow the TODO markers in the starter scripts.
-
-### Updating Dependencies
-
-Add packages with `pip` inside the workshop container:
-
-```bash
-pip install "<package>"
-pip freeze > requirements.txt
-```
-
-Commit the updated `requirements.txt` so collaborators (or rebuilt containers) get the new dependencies.
 
 ### References
 
