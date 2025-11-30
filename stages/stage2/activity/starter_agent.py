@@ -32,7 +32,7 @@ class WeatherForecast(BaseModel):
 @function_tool
 def recommend_outfit(temperature: float, condition: str) -> str:
     """
-    Suggests appropriate clothing based on temperature (Celsius) and weather condition.
+    Suggests appropriate clothing based on temperature (Celsius) and weather condition [sunny, rain, snow].
     """
     recommendation = []
     
@@ -63,31 +63,19 @@ WEATHER_SERVER_PARAMS = MCPServerStdioParams(
 async def main(verbose: bool = False) -> None:
     hooks = build_verbose_hooks(verbose)
     
-    # Start the MCP server as a subprocess
     async with MCPServerStdio(
         params=WEATHER_SERVER_PARAMS,
         cache_tools_list=True,
         name="Weather Server",
     ) as weather_server:
         
+        # TODO: Start the Agent with MCPServerStdio and the recommend_outfit tool
         weather_agent = Agent(
-            name="Weather Assistant",
-            instructions=(
-                "You are a helpful weather assistant. "
-                "1. Use the available weather MCP tool to get the forecast for the requested location. "
-                "2. Use the `recommend_outfit` tool to suggest clothing based on the temperature and condition found. "
-                "3. Return a structured JSON response with the forecast and recommendation."
-            ),
-            tools=[recommend_outfit],
-            mcp_servers=[weather_server],
-            model=model,
-            model_settings=ModelSettings(temperature=0.0),
-            output_type=WeatherForecast,
+            ...
         )
-
-        # Example query
-        query = "What is the weather like in London? What should I wear?"
-        print(f"Query: {query}\n")
+        query = (
+            "..."
+        )
 
         result = await Runner.run(weather_agent, query, hooks=hooks)
         forecast = result.final_output_as(WeatherForecast)

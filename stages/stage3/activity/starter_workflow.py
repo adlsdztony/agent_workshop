@@ -109,39 +109,13 @@ async def main(verbose: bool = False) -> None:
 
     # 2. Define Agents
     blue_agent = Agent(
-        name="Blue Team",
-        handoff_description="Fixes code vulnerabilities.",
-        instructions=(
-            "You are a Secure Code Specialist.\n"
-            "1. Read 'server.py' using `fs.read_code`.\n"
-            "2. Analyze the reported vulnerabilities.\n"
-            "3. Rewrite the ENTIRE file using `fs.rewrite_code` to fix the issues.\n"
-            "   - Remove hardcoded passwords (use os.getenv).\n"
-            "   - Use `subprocess.run` safely or validate inputs instead of `os.system`.\n"
-            "   - Disable debug mode."
-        ),
-        tools=[read_code, rewrite_code],
-        model=model,
-        model_settings=ModelSettings(temperature=0.2),
+        # TODO: Define Blue Team agent to fix vulnerabilities
+        ...
     )
 
     red_agent = Agent(
-        name="Red Team",
-        handoff_description="Audits code for security flaws.",
-        instructions=(
-            "You are a Penetration Tester.\n"
-            "1. Read 'server.py' using `fs.read_code`.\n"
-            "2. Look for:\n"
-            "   - Command Injection (e.g., os.system with user input)\n"
-            "   - Hardcoded secrets\n"
-            "   - Debug flags\n"
-            "   - Insecure bindings (0.0.0.0)\n"
-            "3. Use `audit.report_issue` for EACH finding.\n"
-            "4. If the code is clean, say 'No issues found'."
-        ),
-        tools=[read_code, report_issue],
-        model=model,
-        model_settings=ModelSettings(temperature=0.4),
+        # TODO: Define Red Team agent to audit vulnerabilities
+        ...
     )
 
     ciso_agent = Agent(
